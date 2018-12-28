@@ -1,22 +1,32 @@
-A library for Dart developers.
+## This git repo is an example of issue I'm seeking assistance for.
 
-Created from templates made available by Stagehand under a BSD-style
-[license](https://github.com/dart-lang/stagehand/blob/master/LICENSE).
+My issue: I'm writing a library, but can't access any private objects from another file within my same library.
 
-## Usage
+Example: (two files below, both in lib folder)
 
-A simple usage example:
+### lib/file_one.dart
 
 ```dart
-import 'package:test_lib/test_lib.dart';
+// file: file_one.dart
+library test_lib;
 
-main() {
-  var awesome = new Awesome();
+class TestClass {
+  static String public = 'hello';
+  static String _private = 'world';
 }
 ```
 
-## Features and bugs
+### lib/file_two.dart
+```dart
+// file: file_two.dart
+library test_lib; // same library header as 'file_one.dart'
+import 'file_one.dart';
 
-Please file feature requests and bugs at the [issue tracker][tracker].
+// this works
+String success = TestClass.public; // success = 'hello'
 
-[tracker]: http://example.com/issues/replaceme
+// error: '_private' is not defined for 
+// the TestClass
+String fail = TestClass._private;
+```
+Notes: If I alter code to use part and part of keywords, instead of import, I'm able to access the private variables; however, I see that the [dart documentation recommends avoiding part directive](https://www.dartlang.org/guides/libraries/create-library-packages#organizing-a-library-package).
